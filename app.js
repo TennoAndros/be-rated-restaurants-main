@@ -3,8 +3,8 @@ const {
   getEndpoints,
   getRestaurants,
   postRestaurant,
-  deleteRestaurantById,
-  patchRestaurantById,
+  deleteRestaurant,
+  patchRestaurant,
 } = require("./controllers/restaurantControls");
 
 const app = express();
@@ -14,10 +14,10 @@ app.get("/api", getEndpoints);
 
 app.get("/api/restaurants", getRestaurants);
 
-// app.post("/api/restaurants", postRestaurant);
+app.post("/api/restaurants", postRestaurant);
 
-// app.delete("/api/restaurants/:restaurant_id", deleteRestaurantById);
+app.delete("/api/restaurants/:restaurant_id", deleteRestaurant);
 
-// app.patch("/api/restaurants/:restaurant_id", patchRestaurantById);
+app.patch("/api/restaurants/:restaurant_id", patchRestaurant);
 
 module.exports = app;
