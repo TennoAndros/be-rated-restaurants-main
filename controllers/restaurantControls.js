@@ -4,6 +4,7 @@ const {
   insertRestaurant,
   deleteRestaurantById,
   updateRestaurantById,
+  selectRestaurantsByArea,
 } = require("../models/restaurantModels");
 
 exports.getEndpoints = (req, res) => {
@@ -27,5 +28,11 @@ exports.patchRestaurant = (req, res) => {
   const patchId = req.params.restaurant_id;
   updateRestaurantById(patchId, req.body).then((updatedRestaurant) => {
     res.status(200).send({ updatedRestaurant });
+  });
+};
+exports.getRestaurantsByArea = (req, res) => {
+  const getById = req.params.area_id;
+  selectRestaurantsByArea(+getById).then((area) => {
+    res.status(200).send({ area });
   });
 };

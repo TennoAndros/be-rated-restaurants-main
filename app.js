@@ -5,6 +5,7 @@ const {
   postRestaurant,
   deleteRestaurant,
   patchRestaurant,
+  getRestaurantsByArea,
 } = require("./controllers/restaurantControls");
 
 const app = express();
@@ -19,5 +20,7 @@ app.post("/api/restaurants", postRestaurant);
 app.delete("/api/restaurants/:restaurant_id", deleteRestaurant);
 
 app.patch("/api/restaurants/:restaurant_id", patchRestaurant);
+
+app.get("/api/restaurants/:area_id/restaurants", getRestaurantsByArea);
 
 module.exports = app;
