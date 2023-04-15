@@ -2,7 +2,13 @@ const db = require("../db/connection");
 const format = require("pg-format");
 
 exports.selectRestaurants = () => {
-  return db.query(`SELECT * FROM restaurants`).then((result) => result.rows);
+  return db
+    .query(
+      `SELECT restaurants.*, AVG(rating)::NUMERIC(10, 2)::Int AS average_rating FROM restaurants INNER JOIN ratings ON restaurants.restaurant_id = ratings.restaurant_id GROUP BY restaurants.restaurant_id`
+    )
+    .then((result) => {
+      return result.rows;
+    });
 };
 
 exports.insertRestaurant = ({ restaurant_name, area_id, cuisine, website }) => {

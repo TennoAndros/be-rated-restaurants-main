@@ -37,6 +37,11 @@ describe("/api/restaurants", () => {
               website: expect.any(String),
             })
           );
+          expect(restaurant).toEqual(
+            expect.objectContaining({
+              average_rating: expect.any(Number),
+            })
+          );
         });
       });
   });
