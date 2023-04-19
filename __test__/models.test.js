@@ -88,3 +88,13 @@ describe("/api/restaurants/:restaurant_id", () => {
       });
   });
 });
+describe("/*", () => {
+  test("should send error 404 and msg path not found", () => {
+    return request(app)
+      .get("/appi")
+      .expect(404)
+      .then(({ body: { msg } }) => {
+        expect(msg).toEqual("path not found");
+      });
+  });
+});

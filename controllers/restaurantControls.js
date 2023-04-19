@@ -7,6 +7,7 @@ const {
   selectRestaurantsByArea,
 } = require("../models/restaurantModels");
 
+
 exports.getEndpoints = (req, res) => {
   res.status(200).send({ message: "all ok" });
 };
