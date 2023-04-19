@@ -7,6 +7,10 @@ const {
   patchRestaurant,
   getRestaurantsByArea,
 } = require("./controllers/restaurantControls");
+const {
+  handlePqslErrors,
+  handleCustomErrors,
+} = require("./controllers/errorControllers");
 
 const app = express();
 app.use(express.json());
@@ -26,5 +30,10 @@ app.get("/api/restaurants/:area_id/restaurants", getRestaurantsByArea);
 app.all("/*", (req, res) => {
   res.status(404).send({ msg: "path not found" });
 });
+
+//middlewares
+
+app.use(handlePqslErrors);
+app.use(handleCustomErrors);
 
 module.exports = app;

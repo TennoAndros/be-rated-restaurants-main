@@ -6,8 +6,8 @@ exports.selectRestaurants = () => {
     .query(
       `SELECT restaurants.*, AVG(rating)::NUMERIC(10, 2)::Int AS average_rating FROM restaurants INNER JOIN ratings ON restaurants.restaurant_id = ratings.restaurant_id GROUP BY restaurants.restaurant_id`
     )
-    .then((result) => {
-      return result.rows;
+    .then(({ rows }) => {
+      return rows;
     });
 };
 
@@ -17,10 +17,18 @@ exports.insertRestaurant = ({ restaurant_name, area_id, cuisine, website }) => {
       `INSERT INTO restaurants (restaurant_name,area_id,cuisine,website) VALUES ($1, $2, $3, $4) RETURNING *;`,
       [restaurant_name, area_id, cuisine, website]
     )
-    .then(({ rows }) => rows[0]);
+    .then(({ rows }) => {
+      console.log(rows);
+      return rows[0];
+    });
 };
 exports.deleteRestaurantById = (id) => {
-  return db.query(`DELETE FROM restaurants WHERE restaurant_id=$1`, [id]);
+  return db
+    .query(`DELETE FROM restaurants WHERE restaurant_id=$1 RETURNING *`, [id])
+    .then(({ rows }) => {
+      if (rows.length === 0)
+        return Promise.reject({ code: 404, msg: "Restaurant not found." });
+    });
 };
 exports.updateRestaurantById = (id, updates) => {
   let query = "UPDATE restaurants SET ";

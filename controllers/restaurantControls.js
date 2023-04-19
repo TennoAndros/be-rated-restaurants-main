@@ -7,7 +7,6 @@ const {
   selectRestaurantsByArea,
 } = require("../models/restaurantModels");
 
-
 exports.getEndpoints = (req, res) => {
   res.status(200).send({ message: "all ok" });
 };
@@ -16,14 +15,16 @@ exports.getRestaurants = (req, res) => {
     res.status(200).send({ restaurants })
   );
 };
-exports.postRestaurant = (req, res) => {
-  insertRestaurant(req.body).then((newRestaurant) =>
-    res.status(201).send({ newRestaurant })
-  );
+exports.postRestaurant = (req, res, next) => {
+  insertRestaurant(req.body)
+    .then((newRestaurant) => res.status(201).send({ newRestaurant }))
+    .catch(next);
 };
-exports.deleteRestaurant = (req, res) => {
+exports.deleteRestaurant = (req, res, next) => {
   const deleteId = req.params.restaurant_id;
-  deleteRestaurantById(deleteId).then(() => res.status(204).send());
+  deleteRestaurantById(deleteId)
+    .then(() => res.status(204).send())
+    .catch(next);
 };
 exports.patchRestaurant = (req, res) => {
   const patchId = req.params.restaurant_id;

@@ -3,6 +3,7 @@ const request = require("supertest");
 const { seed } = require("../db/seed");
 const app = require("../app.js");
 const data = require("../db/data/index");
+const { deleteRestaurant } = require("../controllers/restaurantControls");
 
 beforeEach(() => {
   return seed(data);
@@ -66,6 +67,16 @@ describe("/api/restaurants", () => {
         });
       });
   });
+  test("ERROR - should return error 400 for POST when not valid body is sent", () => {
+    const postRestaurant = {};
+    return request(app)
+      .post("/api/restaurants")
+      .send(postRestaurant)
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toEqual("Bad request");
+      });
+  });
 });
 describe("/api/restaurants/:restaurant_id", () => {
   test("DELETE - should delete specified restaurant from db return 204", () => {
@@ -85,6 +96,22 @@ describe("/api/restaurants/:restaurant_id", () => {
           cuisine: "Neapolitan Pizzeria",
           website: "http://rudyspizza.co.uk/",
         });
+      });
+  });
+  test("ERROR - should return error 400 for DELETE when not valid delete_id is sent", () => {
+    return request(app)
+      .delete("/api/restaurants/notAnInt")
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toEqual("Bad request");
+      });
+  });
+  test("ERROR - should return error 404 for DELETE when not valid delete_id is sent", () => {
+    return request(app)
+      .delete("/api/restaurants/500")
+      .expect(404)
+      .then(({ body: { msg } }) => {
+        expect(msg).toEqual("Restaurant not found.");
       });
   });
 });
